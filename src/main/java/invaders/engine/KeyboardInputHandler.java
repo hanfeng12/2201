@@ -1,5 +1,9 @@
 package invaders.engine;
 
+import invaders.strategy.DifficultyStrategy;
+import invaders.strategy.EasyDifficultyStrategy;
+import invaders.strategy.HardDifficultyStrategy;
+import invaders.strategy.MediumDifficultyStrategy;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
@@ -19,6 +23,8 @@ class KeyboardInputHandler {
 
     private Map<String, MediaPlayer> sounds = new HashMap<>();
 
+    private DifficultyStrategy difficultyStrategy;
+
     KeyboardInputHandler(GameEngine model) {
         this.model = model;
 
@@ -30,6 +36,7 @@ class KeyboardInputHandler {
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         sounds.put("shoot", mediaPlayer);
     }
+
 
     void handlePressed(KeyEvent keyEvent) {
         if (pressedKeys.contains(keyEvent.getCode())) {
@@ -59,7 +66,19 @@ class KeyboardInputHandler {
         if(right){
             model.rightPressed();
         }
+
+        // New code for difficulty selection
+        if (keyEvent.getCode().equals(KeyCode.DIGIT1)) {
+            model.initializeForDifficulty(new EasyDifficultyStrategy());
+        } else if (keyEvent.getCode().equals(KeyCode.DIGIT2)) {
+            model.initializeForDifficulty(new MediumDifficultyStrategy());
+        } else if (keyEvent.getCode().equals(KeyCode.DIGIT3)) {
+            model.initializeForDifficulty(new HardDifficultyStrategy());
+        }
     }
+
+
+
 
     void handleReleased(KeyEvent keyEvent) {
         pressedKeys.remove(keyEvent.getCode());

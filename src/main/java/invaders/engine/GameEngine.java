@@ -13,6 +13,7 @@ import invaders.gameobject.Enemy;
 import invaders.gameobject.GameObject;
 import invaders.entities.Player;
 import invaders.rendering.Renderable;
+import invaders.strategy.DifficultyStrategy;
 import org.json.simple.JSONObject;
 
 /**
@@ -195,4 +196,17 @@ public class GameEngine {
 	public Player getPlayer() {
 		return player;
 	}
+
+	public void initializeForDifficulty(DifficultyStrategy difficultyStrategy) {
+		// 清除当前的gameObjects和renderables列表
+		gameObjects.clear();
+		renderables.clear();
+
+		// 重新初始化游戏对象和渲染对象
+		// 这里，我们使用提供的difficultyStrategy来获取相关的配置和设置
+		// ... 其他初始化逻辑 ...
+
+		// 例如，如果difficultyStrategy提供了特定的敌人数量或类型，我们可以在这里使用它
+	}
+
 }
