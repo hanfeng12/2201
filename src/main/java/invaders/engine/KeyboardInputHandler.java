@@ -69,11 +69,11 @@ class KeyboardInputHandler {
 
         // New code for difficulty selection
         if (keyEvent.getCode().equals(KeyCode.DIGIT1)) {
-            model.initializeForDifficulty(new EasyDifficultyStrategy());
+            model.handleDifficultyChange(1);
         } else if (keyEvent.getCode().equals(KeyCode.DIGIT2)) {
-            model.initializeForDifficulty(new MediumDifficultyStrategy());
+            model.handleDifficultyChange(2);
         } else if (keyEvent.getCode().equals(KeyCode.DIGIT3)) {
-            model.initializeForDifficulty(new HardDifficultyStrategy());
+            model.handleDifficultyChange(3);
         }
     }
 

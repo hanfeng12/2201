@@ -1,27 +1,41 @@
-// File: invaders/strategy/EasyDifficultyStrategy.java
 package invaders.strategy;
 
+import invaders.ConfigReader;
+import invaders.builder.BunkerBuilder;
+import invaders.builder.Director;
+import invaders.builder.EnemyBuilder;
+import invaders.gameobject.Bunker;
+import invaders.gameobject.Enemy;
 import invaders.engine.GameEngine;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.util.Scanner;
+import org.json.simple.JSONObject;
 
 public class EasyDifficultyStrategy implements DifficultyStrategy {
-    @Override
-    public void initialize(GameEngine engine) {
-        engine.getGameObjects().clear();
-        engine.getRenderables().clear();
 
-        try {
-            Scanner scanner = new Scanner(Paths.get("src/main/resources/config_easy.json")).useDelimiter("\\Z");
-            String content = scanner.next();
-            // Here you can parse the content string to get the required data from the JSON
-            // For example, if you need a value associated with a key "enemySpeed", you can do something like:
-            // String enemySpeed = content.split("\"enemySpeed\":")[1].split(",")[0].trim();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public void initialize(GameEngine gameEngine) {
+        // Clear current gameObjects and renderables lists
+        gameEngine.getGameObjects().clear();
+        gameEngine.getRenderables().clear();
+
+        // Initialize Player
+        gameEngine.getRenderables().add(gameEngine.getPlayer());
+
+        Director director = new Director();
+
+        // Initialize Bunkers
+        BunkerBuilder bunkerBuilder = new BunkerBuilder();
+        for (Object eachBunkerInfo : ConfigReader.getBunkersInfo()) {
+            Bunker bunker = director.constructBunker(bunkerBuilder, (JSONObject) eachBunkerInfo);
+            gameEngine.getGameObjects().add(bunker);
+            gameEngine.getRenderables().add(bunker);
+        }
+
+        // Initialize Enemies
+        EnemyBuilder enemyBuilder = new EnemyBuilder();
+        for (Object eachEnemyInfo : ConfigReader.getEnemiesInfo()) {
+            Enemy enemy = director.constructEnemy(gameEngine, enemyBuilder, (JSONObject) eachEnemyInfo);
+            gameEngine.getGameObjects().add(enemy);
+            gameEngine.getRenderables().add(enemy);
         }
     }
 }
-
-// Similarly, create MediumDifficultyStrategy and HardDifficultyStrategy with appropriate paths.

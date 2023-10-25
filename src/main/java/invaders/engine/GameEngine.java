@@ -14,6 +14,9 @@ import invaders.gameobject.GameObject;
 import invaders.entities.Player;
 import invaders.rendering.Renderable;
 import invaders.strategy.DifficultyStrategy;
+import invaders.strategy.EasyDifficultyStrategy;
+import invaders.strategy.HardDifficultyStrategy;
+import invaders.strategy.MediumDifficultyStrategy;
 import org.json.simple.JSONObject;
 
 /**
@@ -197,16 +200,32 @@ public class GameEngine {
 		return player;
 	}
 
+	public void handleDifficultyChange(int difficultyCode) {
+		DifficultyStrategy difficultyStrategy;
+		switch (difficultyCode) {
+			case 1:
+				difficultyStrategy = new EasyDifficultyStrategy();
+				break;
+			case 2:
+				difficultyStrategy = new MediumDifficultyStrategy();
+				break;
+			case 3:
+				difficultyStrategy = new HardDifficultyStrategy();
+				break;
+			default:
+				return; // Invalid difficulty code
+		}
+		initializeForDifficulty(difficultyStrategy);
+	}
+
 	public void initializeForDifficulty(DifficultyStrategy difficultyStrategy) {
-		// 清除当前的gameObjects和renderables列表
 		gameObjects.clear();
 		renderables.clear();
 
-		// 重新初始化游戏对象和渲染对象
-		// 这里，我们使用提供的difficultyStrategy来获取相关的配置和设置
-		// ... 其他初始化逻辑 ...
+		renderables.add(player);
 
-		// 例如，如果difficultyStrategy提供了特定的敌人数量或类型，我们可以在这里使用它
+		difficultyStrategy.initialize(this);
 	}
+
 
 }
